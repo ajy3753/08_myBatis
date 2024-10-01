@@ -64,4 +64,42 @@
 		   AND	R.STATUS = 'Y'
 		 ORDER	BY REPLY_NO DESC
 	</select>
+	<select id="selectSearchCount" resultType="_int">
+		SELECT	COUNT(*)
+		  FROM	BOARD B
+		  JOIN	MEMBER ON (BOARD_WRITER = USER_NO)
+		 WHERE	B.STATUS = 'Y'
+		 <if test="condition == 'writer'">
+		 	AND	USER_ID LIKE '%' || #{keyword} || '%'
+		 </if>
+		 <if test="condition == 'title'">
+		 	AND	BOARD_TITLE LIKE '%' || #{keyword} || '%'
+		 </if>
+		 <if test="condition == 'content'">
+		 	AND	BOARD_CONTENT LIKE '%' || #{keyword} || '%'
+		 </if>
+		 LIKE '%' || #{keyword} || '%'
+	</select>
+	<select id="selectSearchList" resultMap="boardResultSet">
+		SELECT	BOARD_NO,
+				USER_ID,
+				COUNT,
+				CREATE_DATE
+		  FROM	BOARD B
+		  JOIN	MEMBER ON (BOARD_WRITER = USER_NO)
+		 WHERE	B.STATUS = 'Y'
+		<choose>
+			<when test="condition == 'writer'">
+				AND	USER_ID
+			</when>
+			<when test="condition == 'title'">
+				AND	BOARD_TITLE
+			</when>
+			<otherwise>
+				AND BOARD_CONTENT
+			</otherwise>
+		</choose>
+		LIKE '%' || #{keyword} || '%'
+		ORDER	BY BOARD_NO DESC
+	</select>
 </mapper>

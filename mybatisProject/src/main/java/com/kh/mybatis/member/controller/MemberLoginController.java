@@ -1,14 +1,15 @@
 package com.kh.mybatis.member.controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import com.kh.mybatis.member.model.vo.Member;
+import com.kh.mybatis.member.service.MemberService;
 import com.kh.mybatis.member.service.MemberServiceImpl;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class MemberLoginController
@@ -33,6 +34,7 @@ public class MemberLoginController extends HttpServlet {
 		m.setUserId(request.getParameter("userId"));
 		m.setUserPwd(request.getParameter("userPwd"));
 		
+		MemberService memberService = new MemberServiceImpl();
 		Member loginUser = new MemberServiceImpl().loginMember(m);
 		
 		if(loginUser != null) {
